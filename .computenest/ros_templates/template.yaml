@@ -244,7 +244,7 @@ Resources:
         - PortRange: 443/443
           Priority: 1
           SourceCidrIp: 0.0.0.0/0
-          IpProtocol: udp
+          IpProtocol: tcp
           NicType: internet
         - PortRange: 80/80
           Priority: 1
