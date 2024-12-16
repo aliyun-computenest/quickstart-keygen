@@ -323,7 +323,7 @@ Resources:
             expect "Choose a primary email:"
             send "${KEYGEN_ADMIN_USER}\n"
             expect "Choose a password:"
-            send "${KEYGEN_ADMIN_PASSWORD}\n"
+            send "${KEYGEN_ADMIN_PASS}\n"
             expect eof
             EOF
             /bin/expect setup.expect
