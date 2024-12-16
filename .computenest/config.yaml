@@ -61,5 +61,5 @@ Artifact:
         cp .env.example ./.env
         docker compose -f docker-compose.yaml build
         docker compose -f docker-compose.yaml run init
-        docker compose -f docker-compose.yaml run build
+        docker compose -f docker-compose.yaml run setup
         docker compose -f docker-compose.yaml pull || true;
