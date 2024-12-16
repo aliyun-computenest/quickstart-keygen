@@ -315,18 +315,10 @@ Resources:
 
             sed -i 's/KEYGEN_ADMIN_USER=[^\n]*/KEYGEN_ADMIN_USER=${KEYGEN_ADMIN_USER}/' /root/application/.env
             sed -i 's/KEYGEN_ADMIN_PASS=[^\n]*/KEYGEN_ADMIN_PASS=${KEYGEN_ADMIN_PASS}/' /root/application/.env
+            sed -i 's/KEYGEN_ADMIN_USER/${KEYGEN_ADMIN_USER}/' /root/application/.env
+            sed -i 's/KEYGEN_ADMIN_PASS/${KEYGEN_ADMIN_PASS}/' /root/application/.env
+            cd /root/application && /bin/expect setup.expect
 
-            cat > setup.expect <<EOF
-            #!/usr/bin/expect
-            set timeout 30
-            spawn docker compose run setup
-            expect "Choose a primary email:"
-            send "${KEYGEN_ADMIN_USER}\n"
-            expect "Choose a password:"
-            send "${KEYGEN_ADMIN_PASS}\n"
-            expect eof
-            EOF
-            /bin/expect setup.expect
 
             systemctl enable quickstart-keygen
             systemctl start quickstart-keygen
