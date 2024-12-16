@@ -197,7 +197,7 @@ Parameters:
   KEYGEN_ADMIN_USER:
     Type: String
     Label: 用户名
-    Default: admin
+    Default: admin@example.com
   KEYGEN_ADMIN_PASS:
     Type: String
     AssociationProperty: ALIYUN::ECS::Instance::Password
