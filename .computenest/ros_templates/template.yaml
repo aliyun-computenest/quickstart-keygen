@@ -321,8 +321,8 @@ Resources:
             sed -i 's/KEYGEN_ADMIN_PASS=[^\n]*/KEYGEN_ADMIN_PASS=${KEYGEN_ADMIN_PASS}/' /root/application/.env
             sed -i 's/KEYGEN_HOST=[^\n]*/KEYGEN_HOST=${KEYGEN_HOST}/' /root/application/.env
 
-            sed -i 's/KEYGEN_ADMIN_USER/${KEYGEN_ADMIN_USER}/' /root/application/.env
-            sed -i 's/KEYGEN_ADMIN_PASS/${KEYGEN_ADMIN_PASS}/' /root/application/.env
+            sed -i 's/KEYGEN_ADMIN_USER/${KEYGEN_ADMIN_USER}/' /root/application/setup.expect
+            sed -i 's/KEYGEN_ADMIN_PASS/${KEYGEN_ADMIN_PASS}/' /root/application/setup.expect
             cd /root/application && /bin/expect setup.expect
 
 
