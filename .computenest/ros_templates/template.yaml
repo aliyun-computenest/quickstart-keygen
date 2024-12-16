@@ -337,13 +337,22 @@ Outputs:
       zh-cn: Keygen访问页面。
     Value:
       Fn::Sub:
-        - http://${ServerAddress}:80
+        - http://${DomainAddress}
+        - DomainAddress:
+            Ref: KEYGEN_HOST
+  Description:
+    Label: 请配置到域名解析或hosts中
+    Value:
+      Fn::Sub:
+        - ${ServerAddress} ${DomainAddress}
         - ServerAddress:
             Fn::Select:
               - 0
               - Fn::GetAtt:
                   - InstanceGroup
                   - PublicIps
+          DomainAddress:
+            Ref: KEYGEN_HOST
 Metadata:
   ALIYUN::ROS::Interface:
     ParameterGroups:
