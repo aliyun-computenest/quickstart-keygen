@@ -1,0 +1,8 @@
+#!/usr/bin/expect
+set timeout 30
+spawn docker compose run setup
+expect "Choose a primary email:"
+send "KEYGEN_ADMIN_USER\n"
+expect "Choose a password:"
+send "KEYGEN_ADMIN_PASS\n"
+expect eof

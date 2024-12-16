@@ -203,6 +203,10 @@ Parameters:
     AssociationProperty: ALIYUN::ECS::Instance::Password
     Label: 密码
     NoEcho: True
+  KEYGEN_HOST:
+    Type: String
+    Label: 域名
+    Default: api.keygen.localhost
 Resources:
   # 新建vpc
   EcsVpc:
@@ -315,6 +319,8 @@ Resources:
 
             sed -i 's/KEYGEN_ADMIN_USER=[^\n]*/KEYGEN_ADMIN_USER=${KEYGEN_ADMIN_USER}/' /root/application/.env
             sed -i 's/KEYGEN_ADMIN_PASS=[^\n]*/KEYGEN_ADMIN_PASS=${KEYGEN_ADMIN_PASS}/' /root/application/.env
+            sed -i 's/KEYGEN_HOST=[^\n]*/KEYGEN_HOST=${KEYGEN_HOST}/' /root/application/.env
+
             sed -i 's/KEYGEN_ADMIN_USER/${KEYGEN_ADMIN_USER}/' /root/application/.env
             sed -i 's/KEYGEN_ADMIN_PASS/${KEYGEN_ADMIN_PASS}/' /root/application/.env
             cd /root/application && /bin/expect setup.expect
@@ -325,10 +331,10 @@ Resources:
           - RegionId:
               Ref: ALIYUN::Region
 Outputs:
-  caddy_address:
+  KeygenURL:
     Description:
-      en: caddy address.
-      zh-cn: caddy 访问页面。
+      en: Keygen URL
+      zh-cn: Keygen访问页面。
     Value:
       Fn::Sub:
         - http://${ServerAddress}:80
@@ -364,6 +370,7 @@ Metadata:
       - Parameters:
           - KEYGEN_ADMIN_USER
           - KEYGEN_ADMIN_PASS
+          - KEYGEN_HOST
         Label:
           en: Software Configuration
           zh-cn: 软件配置
