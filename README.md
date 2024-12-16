@@ -1,18 +1,20 @@
-# QuickStart Demo
+Keygen.sh docker compose example
+===============================
+This is a simple example of how to use the keygen.sh docker image with docker compose.
 
-查看服务实例部署在线文档，请访问 [服务实例部署文档](https://aliyun-computenest.github.io/quickstart-demo)
+You need to have docker and docker compose >v2.24.0 installed in your system.
 
-本文档通过 [MkDocs](https://github.com/mkdocs/mkdocs) 生成，请参考[使用文档](https://www.mkdocs.org/getting-started/#installation) 
-
-1）安装和使用：
-
-```shell
-$ pip install mkdocs # or use pip3 安装文档工具
-$ pip install --upgrade mkdocs-aliyun-computenest # or use pip3 安装计算巢主题
-$ mkdocs serve # in root folder
+## Usage
+1. Clone this repository
+2. Run `docker compose run init` (or `docker compose run --build init` if you update the repo) to generate the keys and account id. If you have problems when running the command, please make sure docker compose >v2.24.0 is installed in your system.
+3. Run `docker compose run setup` to setup the keygen.sh environment
+4. Set the user name and password you used in your environment
+```bash
+# Linux
+export KEYGEN_ADMIN_USER=me@email.com
+export KEYGEN_ADMIN_PASS=password123
 ```
-2）本地预览：本地在浏览器打开 [http://localhost:8000/](http://localhost:8000/) 。
-
-3）本地新建分支后，提交 `Pull request` 到 `main`分支。
-
-4）合并至 `main` 分支后，查看 pages 部署结果。
+5. Run `docker compose up --scale setup=0 --scale init=0` to start the keygen.sh server
+6. Copy the certificates to the certificates folder. You should import the certificates to your system to avoid the security warning in the browser
+```docker cp keygen-docker-compose-caddy-1:/data/caddy/pki ./certificates```
+7. Try the api.rest in vscode to test the server
