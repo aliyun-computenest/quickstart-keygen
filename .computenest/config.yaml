@@ -58,8 +58,8 @@ Artifact:
         mkdir -p /root/application
         if [ -e "/root/code/." ]; then cp -r "/root/code/." "/root/application/"; fi
         cd /root/application
+        yum install -y expect
         cp .env.example ./.env
         docker compose -f docker-compose.yaml build
         docker compose -f docker-compose.yaml run init
-        docker compose -f docker-compose.yaml run setup
         docker compose -f docker-compose.yaml pull || true;
