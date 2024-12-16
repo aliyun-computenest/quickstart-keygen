@@ -1,0 +1,26 @@
+ServiceType: private
+AllowedRegions:
+- ap-southeast-1
+ArtifactSourceType: DockerCompose
+RepoName: aliyun-computenest/quickstart-keygen
+DockerComposeEnvPath: .env.example
+RegionId: cn-hangzhou
+CustomParameters:
+- NoEcho: false
+  Type: String
+  AllowedPattern: ''
+  Label: "\u7528\u6237\u540D"
+  ConstraintDescription: ''
+  Default: admin
+  Name: KEYGEN_ADMIN_USER
+- NoEcho: true
+  Type: String
+  AssociationProperty: ALIYUN::ECS::Instance::Password
+  AllowedPattern: ''
+  Label: "\u5BC6\u7801"
+  ConstraintDescription: ''
+  Name: KEYGEN_ADMIN_PASS
+DockerComposeYamlPath: docker-compose.yaml
+Owner: Alicloud-ComputeNest
+Branch: main
+Platform: github
