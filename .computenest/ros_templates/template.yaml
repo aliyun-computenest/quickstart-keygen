@@ -237,32 +237,12 @@ Resources:
           - Ref: EcsVpc
           - Ref: VpcId
       SecurityGroupIngress:
-        - PortRange: 6379/6379
-          Priority: 1
-          SourceCidrIp: 0.0.0.0/0
-          IpProtocol: tcp
-          NicType: internet
-        - PortRange: 3000/3000
-          Priority: 1
-          SourceCidrIp: 0.0.0.0/0
-          IpProtocol: tcp
-          NicType: internet
-        - PortRange: 443/443
-          Priority: 1
-          SourceCidrIp: 0.0.0.0/0
-          IpProtocol: tcp
-          NicType: internet
         - PortRange: 443/443
           Priority: 1
           SourceCidrIp: 0.0.0.0/0
           IpProtocol: udp
           NicType: internet
         - PortRange: 80/80
-          Priority: 1
-          SourceCidrIp: 0.0.0.0/0
-          IpProtocol: tcp
-          NicType: internet
-        - PortRange: 5432/5432
           Priority: 1
           SourceCidrIp: 0.0.0.0/0
           IpProtocol: tcp
@@ -340,53 +320,14 @@ Resources:
             systemctl start quickstart-keygen
           - RegionId:
               Ref: ALIYUN::Region
-Outputs: 
-  postgres_address:
-    Description:
-      en: postgres address.
-      zh-cn: postgres 访问页面。
-    Value:
-      Fn::Sub:
-        - http://${ServerAddress}:5432
-        - ServerAddress:
-            Fn::Select:
-              - 0
-              - Fn::GetAtt:
-                  - InstanceGroup
-                  - PublicIps
-  redis_address:
-    Description:
-      en: redis address.
-      zh-cn: redis 访问页面。
-    Value:
-      Fn::Sub:
-        - http://${ServerAddress}:6379
-        - ServerAddress:
-            Fn::Select:
-              - 0
-              - Fn::GetAtt:
-                  - InstanceGroup
-                  - PublicIps
-  web_address:
-    Description:
-      en: web address.
-      zh-cn: web 访问页面。
-    Value:
-      Fn::Sub:
-        - http://${ServerAddress}:3000
-        - ServerAddress:
-            Fn::Select:
-              - 0
-              - Fn::GetAtt:
-                  - InstanceGroup
-                  - PublicIps
+Outputs:
   caddy_address:
     Description:
       en: caddy address.
       zh-cn: caddy 访问页面。
     Value:
       Fn::Sub:
-        - http://${ServerAddress}:443, http://${ServerAddress}:80
+        - http://${ServerAddress}:80
         - ServerAddress:
             Fn::Select:
               - 0
