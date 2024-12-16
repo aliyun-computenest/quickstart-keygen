@@ -39,13 +39,13 @@ Service:
   ServiceType: private
   ServiceInfo:
     Locale: zh-CN
-    ShortDescription: demo
+    ShortDescription: Keygen.sh是一个网站，它提供了一种生成密钥（或者称为序列号、激活码）的工具。这个网站允许用户根据其需要生成不同的密钥，用于授权软件或服务的使用。它可以生成各种类型的密钥，包括软件许可证密钥、游戏激活密钥等。尽管Keygen.sh提供了一种方便的方式来生成密钥，但是需要注意的是，未经授权使用他人软件的密钥是违法的。因此，在使用Keygen.sh或其他类似工具时，务必要遵守版权法律，并只使用由合法渠道获得的授权密钥。
     Image: 'resources/icons/service_logo.png'
 Artifact:
   EcsImage:
     ArtifactType: EcsImage
     ArtifactName: ecs_image_quickstart-keygen
-    Description: quickstart-keygen EcsImage
+    Description: keygen EcsImage
     SupportRegionIds: 
         - ap-southeast-1
     ArtifactBuildProperty:
