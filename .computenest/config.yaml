@@ -23,6 +23,8 @@ Service:
             Parameters:
               - InstancePassword
   DeployMetadata:
+    ServiceInstanceNameRule:
+      Prefix: keygen
     SupplierDeployMetadata:
       ArtifactRelation:
         ecs_image_quickstart-keygen:
