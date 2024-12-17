@@ -52,7 +52,9 @@ Keygen社区版在计算巢部署的费用主要涉及：
 ```docker cp keygen-docker-compose-caddy-1:/data/caddy/pki ./certificates```
 
 ## 使用服务
-通过http API访问服务 以下提供了简单的http调用方式
+
+本文将提供两种方式测试本服务。两种方式均通过http API访问服务，以下提供了基本的http调用方式的指令。
+
 ```api
 @host = {{$dotenv KEYGEN_HOST}}
 @adminUser = {{$dotenv KEYGEN_ADMIN_USER}}
@@ -95,5 +97,44 @@ Accept: application/vnd.api+json
 GET https://{{host}}/v1/users
 Authorization: Bearer {{adminToken}}
 ```
-更多使用方法请参考 https://keygen.sh/docs/getting-started/ 
+更多使用方法请参考[文档](https://keygen.sh/docs/getting-started/)
+
+### 配置Hosts（必须）
+
+
+当应用部署完成，会展示host地址：
+![img.png](5.png)
+
+将此地址配置到hosts（注windows和macOS不同），如下图为MacOs，在终端中输入
+````
+sudo vim /etc/hosts
+````
+
+![img.png](6.png)
+
+将host地址粘贴到此处，保存退出。
+![img.png](7.png)
+
+以下将展示两种方式调用如下命令
+````
+GET https://{{host}}/v1/ping
+````
+
+### Curl方式
+在终端中，输入
+````
+GET -k https://api.keygen.localhost/v1/ping -v
+````
+返回值如下，代表连接成功。注意，由于ping正常没有返回值，因为输入-v展示详细内容，并输入-k忽略ssl证书认证。
+![img.png](8.png)
+其余命令调用方式同上。
+
+### VS方式
+下载Vs Code，安装插件Rest Client
+
+进入[链接](https://github.com/aliyun-computenest/quickstart-keygen), 将代码下载到本地，将文件.env.example重命名为.env。
+打开api.rest，点击 send request。
+
+![img.png](9.png)
+
 
