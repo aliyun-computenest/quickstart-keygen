@@ -1,131 +1,99 @@
-# Demo服务实例部署文档
+# Keygen计算巢快速部署
+
+
+>**免责声明：**本服务由第三方提供，我们尽力确保其安全性、准确性和可靠性，但无法保证其完全免于故障、中断、错误或攻击。因此，本公司在此声明：对于本服务的内容、准确性、完整性、可靠性、适用性以及及时性不作任何陈述、保证或承诺，不对您使用本服务所产生的任何直接或间接的损失或损害承担任何责任；对于您通过本服务访问的第三方网站、应用程序、产品和服务，不对其内容、准确性、完整性、可靠性、适用性以及及时性承担任何责任，您应自行承担使用后果产生的风险和责任；对于因您使用本服务而产生的任何损失、损害，包括但不限于直接损失、间接损失、利润损失、商誉损失、数据损失或其他经济损失，不承担任何责任，即使本公司事先已被告知可能存在此类损失或损害的可能性；我们保留不时修改本声明的权利，因此请您在使用本服务前定期检查本声明。如果您对本声明或本服务存在任何问题或疑问，请联系我们。
 
 ## 概述
+Keygen.sh是一个网站，它提供了一种生成密钥（或者称为序列号、激活码）的工具。这个网站允许用户根据其需要生成不同的密钥，用于授权软件或服务的使用。它可以生成各种类型的密钥，包括软件许可证密钥、游戏激活密钥等。尽管Keygen.sh提供了一种方便的方式来生成密钥，但是需要注意的是，未经授权使用他人软件的密钥是违法的。因此，在使用Keygen.sh或其他类似工具时，务必要遵守版权法律，并只使用由合法渠道获得的授权密钥。
 
-`(服务概述内容)`。
+## 前提条件
 
-```
-eg：
+部署Keygen社区版服务实例，需要对部分阿里云资源进行访问和创建操作。因此您的账号需要包含如下资源的权限。
+  **说明**：当您的账号是RAM账号时，才需要添加此权限。
 
-Demo服务是计算巢提供的示例。
-本文向您介绍如何开通计算巢上的`Demo`服务，以及部署流程和使用说明。
-```
+| 权限策略名称                          | 备注                     |
+|---------------------------------|------------------------|
+| AliyunECSFullAccess             | 管理云服务器服务（ECS）的权限       |
+| AliyunVPCFullAccess             | 管理专有网络（VPC）的权限         |
+| AliyunROSFullAccess             | 管理资源编排服务（ROS）的权限       |
+| AliyunComputeNestUserFullAccess | 管理计算巢服务（ComputeNest）的用户侧权限 |
+
 
 ## 计费说明
 
-`(计费说明内容)`
-
-```
-eg:
-
-Demo在计算巢上的费用主要涉及：
+Keygen社区版在计算巢部署的费用主要涉及：
 
 - 所选vCPU与内存规格
 - 系统盘类型及容量
 - 公网带宽
 
-计费方式包括：
-
-- 按量付费（小时）
-- 包年包月
-
-目前提供如下实例：
-
-| 规格族 | vCPU与内存 | 系统盘 | 公网带宽 |
-| --- | --- | --- | --- |
-| ecs.r6.xlarge | 内存型r6，4vCPU 32GiB | ESSD云盘 200GiB PL0 | 固定带宽1Mbps |
-
-预估费用在创建实例时可实时看到。
-如需更多规格、其他服务（如集群高可用性要求、企业级支持服务等），请联系我们 [mailto:xx@xx.com](mailto:xx@xx.com)。
-
-```
-
 ## 部署架构
-
-`(部署概述内容)`
-
-## RAM账号所需权限
-
-`(权限策略内容)`
-
-```
-eg: 
-
-Demo服务需要对ECS、VPC等资源进行访问和创建操作，若您使用RAM用户创建服务实例，需要在创建服务实例前，对使用的RAM用户的账号添加相应资源的权限。添加RAM权限的详细操作，请参见[为RAM用户授权](https://help.aliyun.com/document_detail/121945.html)。所需权限如下表所示。
-
-
-| 权限策略名称 | 备注 |
-| --- | --- |
-| AliyunECSFullAccess | 管理云服务器服务（ECS）的权限 |
-
-```
+<img src="1.png" width="1500" height="700" align="bottom"/>
+    
+|
 
 ## 部署流程
+1. 访问计算巢Keygen社区版[部署链接](https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&ServiceName=Keygen社区版)，按提示填写部署参数：
+    ![image.png](2.png)
 
-### 部署步骤
+2. 参数填写完成后可以看到对应询价明细，确认参数后点击**下一步：确认订单**。
+   ![image.png](3.png)
 
-`(部署步骤内容)`
+3. 确认订单完成后同意服务协议并点击**立即创建**
+   进入部署阶段。
 
+4. 等待部署完成后就可以开始使用服务，进入服务实例详情点击keygen链接和hosts。
+   ![image.png](4.png)
+   您可以配置hosts访问 或者按域名配置cname到公网ip访问域名
+
+## 高级配置
+
+可以把证书拷贝到caddy中以防止https访问告警
+```docker cp keygen-docker-compose-caddy-1:/data/caddy/pki ./certificates```
+
+## 使用服务
+通过http API访问服务 以下提供了简单的http调用方式
+```api
+@host = {{$dotenv KEYGEN_HOST}}
+@adminUser = {{$dotenv KEYGEN_ADMIN_USER}}
+@adminPass = {{$dotenv KEYGEN_ADMIN_PASS}}
+
+# @name ping
+GET https://{{host}}/v1/ping
+
+###
+
+# @name adminlogin
+POST https://{{host}}/v1/tokens
+Authorization: Basic {{adminUser}}:{{adminPass}}
+
+### Get all tokens
+
+@adminToken = {{adminlogin.response.body.data.attributes.token}}
+POST https://{{host}}/v1/tokens
+Authorization: Bearer {{adminToken}}
+
+### Create a user
+POST https://{{host}}/v1/users
+Authorization: Bearer {{adminToken}}
+Content-Type: application/vnd.api+json
+Accept: application/vnd.api+json
+
+{
+    "data": {
+          "type": "users",
+          "attributes": {
+            "firstName": "John",
+            "lastName": "Doe",
+            "email": "jdoe@keygen.sh",
+            "password": "secret"
+          }
+    }
+}
+
+### Get all users
+GET https://{{host}}/v1/users
+Authorization: Bearer {{adminToken}}
 ```
-eg:
+更多使用方法请参考 https://keygen.sh/docs/getting-started/ 
 
-1. 单击部署链接，进入服务实例部署界面，根据界面提示，填写参数完成部署。
-2. 补充示意图。
-```
-### 部署参数说明
-
-`(部署参数说明内容)`
-
-```
-eg:
-
-您在创建服务实例的过程中，需要配置服务实例信息。下文介绍云XR实时渲染平台服务实例输入参数的详细信息。
-
-| 参数组 | 参数项 | 示例 | 说明 |
-| --- | --- | --- | --- |
-| 服务实例名称 |  | test | 实例的名称 |
-| 地域 |  | 华北2（北京） | 选中服务实例的地域，建议就近选中，以获取更好的网络延时。 |
-```
-
-### 验证结果
-
-`(验证结果内容)`
-
-```
-eg:
-
-1. 查看服务实例。服务实例创建成功后，部署时间大约需要2分钟。部署完成后，页面上可以看到对应的服务实例。 
-2. 通过服务实例访问TuGraph。进入到对应的服务实例后，可以在页面上获取到web、rpc、ssh共3种使用方式。
-```
-
-### 使用Demo
-
-`(服务使用说明内容)`
-
-```
-eg:
-
-请访问Demo官网了解如何使用：[使用文档](https://www.aliyun.com)
-```
-
-## 问题排查
-
-`(服务使用说明内容)`
-
-```
-eg:
-
-请访问[Demo的问题排查链接](https://www.aliyun.com)获取帮助。
-```
-
-## 联系我们
-
-欢迎访问Demo官网（[https://www.aliyun.com](https://www.aliyun.com)）了解更多信息。
-
-联系邮箱：[https://www.aliyun.com](mailto:https://www.aliyun.com)
-
-社区版开源地址：[https://github.com/](https://github.com/)
-
-扫码关注微信公众号，技术博客、活动通知不容错过：
-
-`(添加二维码图片)`
