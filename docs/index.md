@@ -128,12 +128,12 @@ Authorization: Basic {{adminUser}}:{{adminPass}}
 
 在终端中，输入
 ````
-GET -k https://api.keygen.localhost/v1/ping -v
+curl -k https://api.keygen.localhost/v1/ping -v
 ````
 返回值如下，代表连接成功。注意，由于ping正常没有返回值，因为输入-v展示详细内容，并输入-k忽略ssl证书认证。
 ![img.png](8.png)
 
-第二条命令，涉及用户名与密码，需要通过base64编码。格式 账号:密码，如 admin@example.com:Abc123456
+第二条命令，涉及用户名与密码，需要通过base64编码。格式 账号:密码，如 admin@example.com:Abc123456，账号密码为创建服务实例时填写内容。
 ![img.png](9.png)
 
 编码后结果为YWRtaW5AZXhhbXBsZS5jb206QWJjMTIzNDU2，输入终端：
@@ -151,7 +151,7 @@ curl -k https://api.keygen.localhost/v1/tokens -XPOST -H "Authorization: Basic Y
 
 ![img.png](11.png)
 
-第二条命令，涉及用户名与密码，需要通过base64编码。格式 账号:密码，如 admin@example.com:Abc123456
+第二条命令，涉及用户名与密码，需要通过base64编码。格式 账号:密码，如 admin@example.com:Abc123456，账号密码为创建服务实例时填写内容。
 ![img.png](9.png)
 编码后结果为YWRtaW5AZXhhbXBsZS5jb206QWJjMTIzNDU2，粘贴到命令红框处，点击 Send Request。调用正常。
 ![img_3.png](12.png)
