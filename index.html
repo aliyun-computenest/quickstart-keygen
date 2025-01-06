@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>Keygen计算巢快速部署 - Aliyun 计算巢 x Demo</title>
+
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="search/main.js"></script>
+  
+
+  
+
+  <script src="js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#keygen">Keygen计算巢快速部署</a></li>
+              
+                  <li><a href="#_1">概述</a></li>
+                  
+              
+                  <li><a href="#_2">前提条件</a></li>
+                  
+              
+                  <li><a href="#_3">计费说明</a></li>
+                  
+              
+                  <li><a href="#_4">部署架构</a></li>
+                  
+              
+                  <li><a href="#_5">部署流程</a></li>
+                  
+              
+                  <li><a href="#_6">高级配置</a></li>
+                  
+              
+                  <li><a href="#_7">使用服务</a></li>
+                  
+                      <li class="li-h3"><a href="#hosts">配置Hosts（必须）</a></li>
+                  
+                      <li class="li-h3"><a href="#curl">Curl方式</a></li>
+                  
+                      <li class="li-h3"><a href="#vs-code">VS Code方式</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="keygen">Keygen计算巢快速部署</h1>
+<blockquote>
+<p><strong>免责声明：</strong>本服务由第三方提供，我们尽力确保其安全性、准确性和可靠性，但无法保证其完全免于故障、中断、错误或攻击。因此，本公司在此声明：对于本服务的内容、准确性、完整性、可靠性、适用性以及及时性不作任何陈述、保证或承诺，不对您使用本服务所产生的任何直接或间接的损失或损害承担任何责任；对于您通过本服务访问的第三方网站、应用程序、产品和服务，不对其内容、准确性、完整性、可靠性、适用性以及及时性承担任何责任，您应自行承担使用后果产生的风险和责任；对于因您使用本服务而产生的任何损失、损害，包括但不限于直接损失、间接损失、利润损失、商誉损失、数据损失或其他经济损失，不承担任何责任，即使本公司事先已被告知可能存在此类损失或损害的可能性；我们保留不时修改本声明的权利，因此请您在使用本服务前定期检查本声明。如果您对本声明或本服务存在任何问题或疑问，请联系我们。</p>
+</blockquote>
+<h2 id="_1">概述</h2>
+<p>Keygen.sh是一个网站，它提供了一种生成密钥（或者称为序列号、激活码）的工具。这个网站允许用户根据其需要生成不同的密钥，用于授权软件或服务的使用。它可以生成各种类型的密钥，包括软件许可证密钥、游戏激活密钥等。尽管Keygen.sh提供了一种方便的方式来生成密钥，但是需要注意的是，未经授权使用他人软件的密钥是违法的。因此，在使用Keygen.sh或其他类似工具时，务必要遵守版权法律，并只使用由合法渠道获得的授权密钥。</p>
+<h2 id="_2">前提条件</h2>
+<p>部署Keygen社区版服务实例，需要对部分阿里云资源进行访问和创建操作。因此您的账号需要包含如下资源的权限。
+  <strong>说明</strong>：当您的账号是RAM账号时，才需要添加此权限。</p>
+<table>
+<thead>
+<tr>
+<th>权限策略名称</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AliyunECSFullAccess</td>
+<td>管理云服务器服务（ECS）的权限</td>
+</tr>
+<tr>
+<td>AliyunVPCFullAccess</td>
+<td>管理专有网络（VPC）的权限</td>
+</tr>
+<tr>
+<td>AliyunROSFullAccess</td>
+<td>管理资源编排服务（ROS）的权限</td>
+</tr>
+<tr>
+<td>AliyunComputeNestUserFullAccess</td>
+<td>管理计算巢服务（ComputeNest）的用户侧权限</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">计费说明</h2>
+<p>Keygen社区版在计算巢部署的费用主要涉及：</p>
+<ul>
+<li>所选vCPU与内存规格</li>
+<li>系统盘类型及容量</li>
+<li>公网带宽</li>
+</ul>
+<h2 id="_4">部署架构</h2>
+<p><img src="1.png" width="1500" height="700" align="bottom"/></p>
+<p>|</p>
+<h2 id="_5">部署流程</h2>
+<ol>
+<li>
+<p>访问计算巢Keygen社区版<a href="https://computenest.console.aliyun.com/service/instance/create/cn-hangzhou?type=user&amp;ServiceName=Keygen社区版">部署链接</a>，按提示填写部署参数：
+    <img alt="image.png" src="2.png" /></p>
+</li>
+<li>
+<p>参数填写完成后可以看到对应询价明细，确认参数后点击<strong>下一步：确认订单</strong>。
+   <img alt="image.png" src="3.png" /></p>
+</li>
+<li>
+<p>确认订单完成后同意服务协议并点击<strong>立即创建</strong>
+   进入部署阶段。</p>
+</li>
+<li>
+<p>等待部署完成后就可以开始使用服务，进入服务实例详情点击keygen链接和hosts。
+   <img alt="image.png" src="4.png" />
+   您可以配置hosts访问 或者按域名配置cname到公网ip访问域名</p>
+</li>
+</ol>
+<h2 id="_6">高级配置</h2>
+<p>可以把证书拷贝到caddy中以防止https访问告警
+<code>docker cp keygen-docker-compose-caddy-1:/data/caddy/pki ./certificates</code></p>
+<h2 id="_7">使用服务</h2>
+<p>本文将提供两种方式测试本服务。两种方式均通过http API访问服务，以下提供了基本的http调用方式的指令。</p>
+<pre><code class="language-api">@host = {{$dotenv KEYGEN_HOST}}
+@adminUser = {{$dotenv KEYGEN_ADMIN_USER}}
+@adminPass = {{$dotenv KEYGEN_ADMIN_PASS}}
+
+# @name ping
+GET https://{{host}}/v1/ping
+
+###
+
+# @name adminlogin
+POST https://{{host}}/v1/tokens
+Authorization: Basic {{adminUser}}:{{adminPass}}
+
+### Get all tokens
+
+@adminToken = {{adminlogin.response.body.data.attributes.token}}
+POST https://{{host}}/v1/tokens
+Authorization: Bearer {{adminToken}}
+
+### Create a user
+POST https://{{host}}/v1/users
+Authorization: Bearer {{adminToken}}
+Content-Type: application/vnd.api+json
+Accept: application/vnd.api+json
+
+{
+    &quot;data&quot;: {
+          &quot;type&quot;: &quot;users&quot;,
+          &quot;attributes&quot;: {
+            &quot;firstName&quot;: &quot;John&quot;,
+            &quot;lastName&quot;: &quot;Doe&quot;,
+            &quot;email&quot;: &quot;jdoe@keygen.sh&quot;,
+            &quot;password&quot;: &quot;secret&quot;
+          }
+    }
+}
+
+### Get all users
+GET https://{{host}}/v1/users
+Authorization: Bearer {{adminToken}}
+</code></pre>
+<p>更多使用方法请参考<a href="https://keygen.sh/docs/getting-started/">文档</a></p>
+<h3 id="hosts">配置Hosts（必须）</h3>
+<p>当应用部署完成，会展示host地址：
+<img alt="img.png" src="5.png" /></p>
+<p>将此地址配置到hosts（注windows和macOS不同），如下图为MacOs，在终端中输入</p>
+<pre><code>sudo vim /etc/hosts
+</code></pre>
+<p><img alt="img.png" src="6.png" /></p>
+<p>将host地址粘贴到此处，保存退出。
+<img alt="img.png" src="7.png" /></p>
+<p>以下将展示两种方式调用如下命令</p>
+<pre><code>GET https://{{host}}/v1/ping
+
+# @name adminlogin
+POST https://{{host}}/v1/tokens
+Authorization: Basic {{adminUser}}:{{adminPass}}
+</code></pre>
+<h3 id="curl">Curl方式</h3>
+<p>在终端中，输入</p>
+<pre><code>curl -k https://api.keygen.localhost/v1/ping -v
+</code></pre>
+<p>返回值如下，代表连接成功。注意，由于ping正常没有返回值，因为输入-v展示详细内容，并输入-k忽略ssl证书认证。
+<img alt="img.png" src="8.png" /></p>
+<p>第二条命令，涉及用户名与密码，需要通过base64编码。格式 账号:密码，如 admin@example.com:Abc123456，账号密码为创建服务实例时填写内容。
+<img alt="img.png" src="9.png" /></p>
+<p>编码后结果为YWRtaW5AZXhhbXBsZS5jb206QWJjMTIzNDU2，输入终端：</p>
+<pre><code>curl -k https://api.keygen.localhost/v1/tokens -XPOST -H &quot;Authorization: Basic YWRtaW5AZXhhbXBsZS5jb206QWJjMTIzNDU2&quot;
+</code></pre>
+<p><img alt="img_2.png" src="10.png" />
+其余命令调用方式同上。</p>
+<h3 id="vs-code">VS Code方式</h3>
+<p>下载Vs Code，安装插件Rest Client</p>
+<p>进入<a href="https://github.com/aliyun-computenest/quickstart-keygen">链接</a>, 将代码下载到本地，将文件.env.example复制或重命名为.env。
+打开api.rest，点击 Send Request。调用正常。</p>
+<p><img alt="img.png" src="11.png" /></p>
+<p>第二条命令，涉及用户名与密码，需要通过base64编码。格式 账号:密码，如 admin@example.com:Abc123456，账号密码为创建服务实例时填写内容。
+<img alt="img.png" src="9.png" />
+编码后结果为YWRtaW5AZXhhbXBsZS5jb206QWJjMTIzNDU2，粘贴到命令红框处，点击 Send Request。调用正常。
+<img alt="img_3.png" src="12.png" />
+其余命令调用方式同上。</p>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.6.1
+  Docs Build Date UTC : 2025-01-06 09:07:06.244160+00:00
+  -->
+</body>
+</html>
